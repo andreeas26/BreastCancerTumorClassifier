@@ -1,0 +1,25 @@
+{
+	"config":
+	[
+		{	"opt": "Adam",
+			"loss": "categorical_crossentropy",
+			"epochs": 35,
+			"init_lr": 1e-3,
+			"batch_size": 32
+		},
+		
+		{	"opt": "Adam",
+			"loss": "binary_crossentropy",
+			"epochs": 35,
+			"init_lr": 1e-3,
+			"batch_size": 32
+		},
+		
+		{	"opt": "Adam",
+			"loss": "binary_crossentropy",
+			"epochs": 65,
+			"init_lr": 1e-3,
+			"batch_size": 32
+		}
+	]
+}
