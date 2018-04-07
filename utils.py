@@ -51,8 +51,8 @@ def plot_metrics(loss_plot_name, acc_plot_name, n_epochs, history):
     plt.style.use("ggplot")
     plt.figure(1)
 
-    plt.plot(np.arange(0, n_epochs), history["loss"], label="train_loss")
-    plt.plot(np.arange(0, n_epochs), history["val_loss"], label="val_loss")
+    plt.plot(np.arange(0, n_epochs), history["loss"], marker='o', label="train_loss")
+    plt.plot(np.arange(0, n_epochs), history["val_loss"], marker='o', label="val_loss")
     plt.title("Training and Validation Loss on Breast Cancer detector")
     plt.axes().yaxis.set_major_formatter(FormatStrFormatter('%.2f'))
     plt.xlabel("Epoch #")
@@ -60,9 +60,12 @@ def plot_metrics(loss_plot_name, acc_plot_name, n_epochs, history):
     plt.legend(loc="lower left")
     plt.savefig(loss_plot_name)
 
+    # clear the figure
+    plt.gcf().clear()
+
     plt.figure(2)
-    plt.plot(np.arange(0, n_epochs), history["binary_accuracy"], label="train_acc")
-    plt.plot(np.arange(0, n_epochs), history["val_binary_accuracy"], label="val_acc")
+    plt.plot(np.arange(0, n_epochs), history["binary_accuracy"], marker='o', label="train_acc")
+    plt.plot(np.arange(0, n_epochs), history["val_binary_accuracy"], marker='o', label="val_acc")
     plt.title("Training and Validation Accuracy on Breast Cancer detector")
     plt.axes().yaxis.set_major_formatter(FormatStrFormatter('%.2f'))
     plt.xlabel("Epoch #")
@@ -70,6 +73,8 @@ def plot_metrics(loss_plot_name, acc_plot_name, n_epochs, history):
     plt.legend(loc="lower left")
     plt.savefig(acc_plot_name)
 
+    # clear the figure
+    plt.gcf().clear()
 
 def load_saved_history(csv_history_filename):
     csv_history = {'epoch': [],

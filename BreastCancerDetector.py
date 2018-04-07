@@ -26,8 +26,9 @@ from sklearn.preprocessing import LabelEncoder
 from sklearn.metrics import confusion_matrix
 from sklearn import metrics
 from lenet import LeNet
-from lenet2 import LeNet2
+from lenetR import LeNetR
 from imutils import paths
+import glob
 # set the matplotlib backend so figures can be saved in the background
 import matplotlib
 matplotlib.use("Agg")
@@ -201,21 +202,21 @@ class BreastCancerDetector:
 
         # initialize the model
         print("[INFO] compiling the model...")
-        model = LeNet.build(width=28, height=28, depth=1, classes=n_classes)
+        model = LeNetR.build(width=28, height=28, depth=1, classes=n_classes)
         # model = LeNet2.build(width=128, height=128, depth=1, classes=n_classes)
 
         opt = Adam(lr=self._INIT_LR, decay=self._INIT_LR / self._EPOCHS)
 
         model.compile(loss=self._loss, optimizer=opt, metrics=["binary_accuracy"])
 
-        print("[INFO] initializing Tensorboard...")
+        # print("[INFO] initializing Tensorboard...")
 
-        now = time.strftime("%w-%m-%Y_%M-%S", time.localtime(time.time()))
+        # now = time.strftime("%w-%m-%Y_%M-%S", time.localtime(time.time()))
 
-        tensorboard = TensorBoard(log_dir="{}breast_cancer_mias/training_{}".format(TB_ROOT, now),
-                                  histogram_freq=1,
-                                  write_graph=True,
-                                  write_images=True)
+        # tensorboard = TensorBoard(log_dir="{}breast_cancer_mias/training_{}".format(TB_ROOT, now),
+        #                           histogram_freq=1,
+        #                           write_graph=True,
+        #                           write_images=True)
 
         # csv_logger = CSVLogger('metrics/training_{}.log'.format(now))
 
@@ -269,7 +270,7 @@ class BreastCancerDetector:
 
         csv_writer = csv.DictWriter(csv_file, fieldnames=csv_header)
         csv_writer.writeheader()
-        where_to_save = "models/with_data_augmentation/"
+        WHERE_TO_SAVE = "models/with_dropout1/"
 
         for i in range(0, n_repeats):
             loss = []
@@ -284,7 +285,7 @@ class BreastCancerDetector:
 
                 # save the model to disk
                 print("[INFO] serializing network...")
-                model.save("{}model_run{}_fold{}_{}.h5".format(where_to_save,i, (j + 1), n_splits))
+                model.save("{}model_run{}_fold{}_{}.h5".format(WHERE_TO_SAVE,i, (j + 1), n_splits))
 
                 K.clear_session()  # !!!!
             row = {'Grand_mean_loss': np.mean(loss), 'Grand_mean_acc': np.mean(acc)}
@@ -354,14 +355,7 @@ class BreastCancerDetector:
         cv2.waitKey(0)
 
 
-
-
 if __name__ == '__main__':
-    # TODO: data preparation: filters, see papers
-    # TODO: random crop: how to send the input to the network?
-    # TODO: learned feature visualization in Tensorboard or something else
-    # TODO: Histogram tensorboard meaning
-    # TODO: cross validation for tuning hyperparmeters skicit-learn
 
     bcDetector = BreastCancerDetector()
     bcDetector.config(config_filename="configs.txt", config_id=1)  # !!!changed
@@ -369,15 +363,22 @@ if __name__ == '__main__':
     dataset = 'E:/work/mias_mammography/DDSM/Train/resized'
     bcDetector.evaluate_models(dataset, n_splits=5, n_repeats=30)
 
-    # now = time.strftime("%w-%m-%Y_%M-%S", time.localtime(time.time()))
-    #
+    # now = time.strftime("%d-%m-%Y_%H-%M", time.localtime(time.time()))
+
     # bcDetector.train(dataset_name=dataset, saved_model='models/model_{}.h5'.format(now))
 
-    # csv_history = utils.load_saved_history('metrics/without_da/plots_run2/training_0-03-2018_32-07.csv')
-    # utils.plot_metrics("metrics/without_da/plots_run2/loss_metrics_training_0-03-2018_32-07.png",
-    #                    "metrics/without_da/plots_run2/acc_metrics_training_0-03-2018_32-07.png",
+    csv_paths = sorted(list(glob.glob("metrics/with_da/plots_run1/*.csv")))
+
+    # for file in csv_paths:
+    #     base_filename = os.path.basename(file)
+    #     name = os.path.splitext(base_filename)[0]
+    #
+    #     csv_history = utils.load_saved_history(file)
+    #     utils.plot_metrics("metrics/with_da/plots_run1/loss_metrics_{}.png".format(name),
+    #                    "metrics/with_da/plots_run1/acc_metrics_{}.png".format(name),
     #                    n_epochs=len(csv_history['epoch']),
     #                    history=csv_history)
+    #     csv_history = None
 
     # test_img = 'E:/work/mias_mammography/DDSM/Test/resized/benign/Calc_P_00038_CC_1.jpg'
     # test_dataset = 'E:/work/mias_mammography/DDSM/Test/resized'

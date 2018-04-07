@@ -7,6 +7,8 @@ from keras.layers.core import Flatten
 from keras.layers.core import Dense
 from keras import backend as K
 
+# The classical LeNet architecture without regularization techniques
+
 
 class LeNet:
     @staticmethod

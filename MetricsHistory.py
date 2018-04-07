@@ -3,8 +3,7 @@ import time
 from keras.callbacks import Callback
 import csv
 
-
-
+WHERE_TO_SAVE = "metrics/with_dropout1/"
 
 class MetricsHistory(Callback):
 
@@ -21,11 +20,11 @@ class MetricsHistory(Callback):
         self.val_losses = []
         self.val_bin_acc = []
 
-        now = time.strftime("%w-%m-%Y_%M-%S", time.localtime(time.time()))
+        now = time.strftime("%d-%m-%Y_%H-%M", time.localtime(time.time()))
 
         header = ['Epoch', 'Batch', 'Loss', 'Binary_acc', 'Val_loss', 'Val_binary_acc']
 
-        csv_file = open('metrics/training_{}.csv'.format(now), 'w')
+        csv_file = open('{}/training_{}.csv'.format(WHERE_TO_SAVE, now), 'w')
 
         self.csv_writer = csv.DictWriter(csv_file, fieldnames=header)
         self.csv_writer.writeheader()
