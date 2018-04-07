@@ -3,7 +3,7 @@
 ~~ WORK IN PROGRESS ~~
 
 ### Short intro ###
-Implementation of a breast cancer tumor classifier (bening or malignant) using deep learning techniques. 
+Implementation of a breast cancer tumor classifier (benign or malignant) using deep learning techniques. 
 
 ### Dependencies ###
 * Python 3.6.3
